@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CurrencyRatesCommand } from './app.command';
+import { CurrencyRatesCommand } from './currency-rate.command';
 
 @Module({
   imports: [],
