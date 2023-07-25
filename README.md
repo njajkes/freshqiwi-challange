@@ -6,8 +6,8 @@ $ npm build
 
 ## Usage
 
-```
-njajkes currency_rates [-d|--date] [date] [-c|--code] [code]
+```bash
+$ njajkes currency_rates [-d|--date] [date] [-c|--code] [code]
 ```
 
 Where:
