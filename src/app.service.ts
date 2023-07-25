@@ -4,15 +4,21 @@ import { DOMParser } from '@xmldom/xmldom';
 
 @Injectable()
 export class AppService {
-  private async getRates(date: string) {
+  private parseDate(date: string) {
     const parsedDateString = new Date(date).toISOString().split('T')[0];
 
     const formatedDate = new Date(parsedDateString)
       .toLocaleDateString('ru-RU')
       .replaceAll('.', '/');
 
+    return formatedDate;
+  }
+
+  private async getRates(date: string) {
+    const parsedDateString = this.parseDate(date);
+
     const { data } = await axios.get<string>(
-      `http://www.cbr.ru/scripts/XML_daily.asp?date_req=${formatedDate}`,
+      `http://www.cbr.ru/scripts/XML_daily.asp?date_req=${parsedDateString}`,
       {
         headers: {
           Accept: 'application/xml',
@@ -26,26 +32,6 @@ export class AppService {
   private parseXML(xml: string) {
     return new DOMParser().parseFromString(xml, 'application/xml')
       .documentElement;
-  }
-
-  private parseItem(node: ChildNode) {
-    let charcode: string;
-    let value: string;
-    let name: string;
-
-    Array.from(node.childNodes).forEach((key: any) => {
-      if (key.nodeName.toLocaleLowerCase() === 'charcode') {
-        charcode = key.firstChild.data;
-      }
-      if (key.nodeName.toLocaleLowerCase() === 'value') {
-        value = key.firstChild.data;
-      }
-      if (key.nodeName.toLocaleLowerCase() === 'name') {
-        name = key.firstChild.data;
-      }
-    });
-
-    return { charcode, value, name };
   }
 
   private parseTree(root: HTMLElement) {
